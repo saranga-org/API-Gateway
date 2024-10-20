@@ -13,21 +13,21 @@ public class Routes {
     @Bean
     public RouterFunction<ServerResponse> fuelQuotaServiceRoute(){
         return GatewayRouterFunctions.route("fuel_quota_service")
-                .route(RequestPredicates.path("/api/fuel-quota"), HandlerFunctions.http("http://localhost:8084"))
+                .route(RequestPredicates.path("/api/fuel-quota/**"), HandlerFunctions.http("http://localhost:8084"))
                 .build();
     }
 
     @Bean
     public RouterFunction<ServerResponse> notificationServiceRoute(){
-        return GatewayRouterFunctions.route("notification_service")
-                .route(RequestPredicates.path("/api/notification"),HandlerFunctions.http("http://localhost:8080"))
+        return GatewayRouterFunctions.route("vehicle_service")
+                .route(RequestPredicates.path("/api/vehicles/**"),HandlerFunctions.http("http://localhost:8083"))
                 .build();
     }
 
     @Bean
     public RouterFunction<ServerResponse> resourceServiceRoute(){
         return GatewayRouterFunctions.route("resource_service")
-                .route(RequestPredicates.path("/api/resource"),HandlerFunctions.http("http://localhost:8082"))
+                .route(RequestPredicates.path("/api/resource/**"),HandlerFunctions.http("http://localhost:8082"))
                 .build();
     }
 }
