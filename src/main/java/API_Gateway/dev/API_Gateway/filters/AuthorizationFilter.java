@@ -26,12 +26,11 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         // Skip authentication for these endpoints
-        if (path.startsWith("/api/resource/auth/register") ||
-                path.startsWith("/api/resource/auth/authenticate") ||
-                path.startsWith("/api/resource/otp/**")) {
+        if (path.matches("^/api/resource(/.*)?$")) {
             filterChain.doFilter(request, response);
             return;
         }
+
 
         // Extract Authorization header
         String authHeader = request.getHeader("Authorization");
@@ -42,7 +41,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             response.getWriter().write("Missing or invalid Authorization header");
             return;
         }
-
 
 
         try {

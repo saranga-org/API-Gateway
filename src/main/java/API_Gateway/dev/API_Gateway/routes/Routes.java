@@ -20,14 +20,14 @@ public class Routes {
     @Bean
     public RouterFunction<ServerResponse> notificationServiceRoute(){
         return GatewayRouterFunctions.route("vehicle_service")
-                .route(RequestPredicates.path("/api/vehicles/**"),HandlerFunctions.http("http://localhost:8083"))
+                .route(RequestPredicates.path("/api/vehicle/**"),HandlerFunctions.http("http://localhost:8082"))
                 .build();
     }
 
     @Bean
     public RouterFunction<ServerResponse> resourceServiceRoute(){
         return GatewayRouterFunctions.route("resource_service")
-                .route(RequestPredicates.path("/api/resource/**"),HandlerFunctions.http("http://localhost:8082"))
+                .route(RequestPredicates.path("/api/resource/**"),HandlerFunctions.http("http://localhost:8081"))
                 .build();
     }
 }
