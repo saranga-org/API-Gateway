@@ -31,41 +31,36 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-
-        // Extract Authorization header
         String authHeader = request.getHeader("Authorization");
 
-        // Check for missing or invalid Authorization header
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.getWriter().write("Missing or invalid Authorization header");
             return;
         }
 
+        AuthorizationResponse userName = null;
 
         try {
-            AuthorizationResponse isValidRequest = null;
-            // Forward the Bearer token to the auth service for validation
             if (path.startsWith("/api/fuel-quota")) {
-                isValidRequest = authServiceClient.validateStationOwner(authHeader).getBody();
-            } else if (path.startsWith("/api/vehicle-service")) {
-                isValidRequest = authServiceClient.validateGeneralUser(authHeader).getBody();
+                userName = authServiceClient.validateStationOwner(authHeader).getBody();
+            } else if (path.startsWith("/api/vehicle")) {
+                userName = authServiceClient.validateGeneralUser(authHeader).getBody();
             }
 
-            // Check if the response from the auth service is null or unauthorized
-            if (isValidRequest == null || !isValidRequest.isAuthorized()) {
+            if (userName == null || userName.getUserName() == null) {
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
                 response.getWriter().write("Unauthorized request in gateway");
                 return;
             }
+            request.setAttribute("userName", userName);
 
         } catch (Exception e) {
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.getWriter().write("Error contacting auth service: " + e.getMessage());
             return;
         }
-
-        // Proceed if the token is valid and authorized
         filterChain.doFilter(request, response);
     }
 }
+

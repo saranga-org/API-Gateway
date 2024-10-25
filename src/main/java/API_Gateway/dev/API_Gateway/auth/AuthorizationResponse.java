@@ -1,18 +1,14 @@
 package API_Gateway.dev.API_Gateway.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class AuthorizationResponse {
-    private boolean authorized;
+    private String userName;
 
-    public boolean isAuthorized() {
-        return authorized;
-    }
 }
